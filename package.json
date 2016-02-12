@@ -20,5 +20,9 @@
   "devDependencies": {
     "eslint": "^2.0.0",
     "eslint-plugin-react": "^3.16.1"
+  },
+  "dependencies": {
+    "html-webpack-plugin": "^2.8.1",
+    "webpack": "^1.12.13"
   }
 }
