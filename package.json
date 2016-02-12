@@ -2,13 +2,12 @@
   "name": "game-of-life",
   "version": "0.0.1",
   "description": "Implementation of Game of Life using modern frontend frameworks",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": ""
   },
   "repository": {
     "type": "git",
-    "url": "github.com/arjandepooter/game-of-life"
+    "url": "git+https://github.com/arjandepooter/game-of-life"
   },
   "keywords": [
     "game",
@@ -17,5 +16,9 @@
     "conway"
   ],
   "author": "Arjan de Pooter <mail@arjandepooter.nl>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^2.0.0",
+    "eslint-plugin-react": "^3.16.1"
+  }
 }
