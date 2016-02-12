@@ -61,3 +61,25 @@ State.prototype.getNeighbours = function(x, y) {
 	}
 	return neighbours;
 }
+
+// Internal function used to check if cell should be alive or not
+State.prototype._shouldTransform = function(cell, alive) {
+	const aliveNeighbours = this.getNeighbours(cell.x, cell.y).count(v => v);
+	return alive ? aliveNeighbours > 1 && aliveNeighbours < 4:aliveNeighbours === 3;
+}
+
+// Calculate new state
+State.prototype.transform = function() {
+	const newState = new State();
+	let cellsToCheck = Set();
+
+	this.grid.forEach(cell => {
+		newState.set(cell.x, cell.y, this._shouldTransform(cell, true));
+		this.getNeighbours(cell.x, cell.y).filterNot(v => v).forEach((_, cell) => {
+			cellsToCheck = cellsToCheck.add(cell);
+		});
+	});
+	cellsToCheck.forEach(cell => newState.set(cell.x, cell.y, this._shouldTransform(cell, false)));
+
+	return newState;
+}

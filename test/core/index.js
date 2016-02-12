@@ -1,6 +1,7 @@
 'use strict';
 
 import { Cell, State } from '../../src/core';
+import Immutable from 'immutable';
 import should from 'should';
 
 describe('State', function() {
@@ -51,4 +52,38 @@ describe('State', function() {
 			done();
 		});
 	});
+
+	describe('transform', function() {
+		it('should transform a 2x2 square to a 2x2 square', done => {
+			const state = new State();
+			state.setAlive(0, 0).setAlive(0, 1).setAlive(1, 0).setAlive(1, 1);
+			const newState = state.transform();			
+			Immutable.is(state.grid, newState.grid).should.be.true();
+			done();
+		});
+
+		it('should rotate a line with length 3', done => {
+			const state = new State();
+			state.setAlive(-1, 0).setAlive(0, 0).setAlive(1, 0);
+			const newState = state.transform();
+			newState.size.should.be.equal(3);
+			newState.isAlive(0, -1).should.be.true();
+			newState.isAlive(0, 0).should.be.true();
+			newState.isAlive(0, 1).should.be.true();
+			done();
+		});
+
+		it('should remove the center of a 3x3 square', done => {
+			const state = new State();
+			for(let x = -1; x <= 1; x++) {
+				for(let y = -1; y <= 1; y++) {
+					state.setAlive(x, y);
+				}
+			}
+			const newState = state.transform();
+			newState.size.should.be.equal(8);
+			newState.isAlive(0, 0).should.be.false();
+			done();
+		});
+	})
 });
