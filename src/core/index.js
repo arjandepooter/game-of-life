@@ -14,6 +14,8 @@ export const Cell = Record({
 	y: 0
 });
 
+export const INITIAL_STATE = Set();
+
 // Set a cell to be alive
 export const set = (state, cell) => state.add(cell);
 
@@ -25,24 +27,26 @@ export const toggle = (state, cell) => state.has(cell) ? unset(state, cell):set(
 
 // Calculate next state
 export const next = state =>
-	state.filter(cell => {
-		// Living cells who need to stay alive
-		const neighbours = getNeighbours(state, cell).filter(v => v).size;
-		return neighbours >= 2 && neighbours <= 3;
-	}).concat(
-		// Death neighbours of living cells who should become alive
-		state
-			.reduce((prev, val) => getNeighbours(state, val)
-				.filterNot(v => v)
+	state
+		.filter(cell => {
+			// Living cells who need to stay alive
+			const neighbours = getNeighbours(state, cell).filter(v => v).size;
+			return neighbours >= 2 && neighbours <= 3;
+		})
+		.concat(
+			// Death neighbours of living cells who should become alive
+			state
+				.reduce((prev, val) => getNeighbours(state, val)
+					.filterNot(v => v)
+					.keySeq()
+					.reduce(
+						(prev2, val2) => prev2.update(val2, 0, n => n + 1),
+						prev
+					), Map())
+				.filter(v => v == 3)
 				.keySeq()
-				.reduce(
-					(prev2, val2) => prev2.update(val2, 0, n => n + 1),
-					prev
-				), Map())
-			.filter(v => v == 3)
-			.keySeq()
-			.reduce((prev, val) => prev.add(val), Set())
-	);
+				.reduce((prev, val) => prev.add(val), Set()
+		));
 
 // get neighbours of a cell with it's alive status
 export const getNeighbours = (state, cell) =>
